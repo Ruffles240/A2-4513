@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+
+    background-image: url("../images/photo-1614949194403-9602bdc14a3a.avif");
+
+    background-size: cover;
+    /* Photo credit to Clément Delacre
+    https://unsplash.com/photos/red-and-black-f-1-race-car-on-track-during-daytime-M5s9Ffs1KqU*/
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .fade-in-up {
+    animation: appear 0.5s ease-out forwards;
+  }
+
+  a {
+
+    text-decoration: underline;
+  }
