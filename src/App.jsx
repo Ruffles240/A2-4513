@@ -250,14 +250,14 @@ const[isCircuitOpen, setIsCircuitOpen]= useState(false);
     <Dialog.Panel className="w-3/5 h-3/5 bg-gray-500 rounded-md p-6 flex flex-col justify-between">
       <Dialog.Title className="text-center font-bold text-4xl mb-4">{props.circuit.name}</Dialog.Title>
       <Dialog.Description className={"m-auto"}>
-        <p>Nationality: {props.circuit.nationality}</p>
+        <p>Nationality: {props.circuit.country}</p>
         <a href={props.circuit.url}>{props.circuit.url}</a>
 
       
       </Dialog.Description>
       <div className="flex justify-center space-x-3 pt-4">
         <button onClick={() => setIsCircuitOpen(false)} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Close</button>
-        <button onClick={() => setCircuitFavorites(prevFavorites => [...prevFavorites, <CircuitLink circuit ={props.circuit}/>])} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Add Favorite</button>
+        <button onClick={() => { if(!circuitFavorites.includes(props.circuit.name)){setCircuitFavorites(prevFavorites => [...prevFavorites, props.circuit.name])}}} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Add Favorite</button>
       </div>
     </Dialog.Panel>
   </Dialog>
