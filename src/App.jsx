@@ -53,18 +53,21 @@ function App() {
   const [currentYear, setCurrentYear] = useState(0);
   const [resultsData, setResults] =useState([]);
   const [raceView, setRaceView] = useState(true);
-  const[driverStandingsData, setDriverStandingsData]=useState([]);
-  const[constructorStandingsData, setConstructorStandingsData]=useState([]);
-  const[selectedDriver, selectDriver] =useState(sampleDriver);
-  const[selectedConstructor, selectConstructor] =useState(sampleCon);
-  const[selectedCircuit, selectCircuit] =useState(sampleCircuit);
+  const [driverStandingsData, setDriverStandingsData]=useState([]);
+  const [constructorStandingsData, setConstructorStandingsData]=useState([]);
+  const [selectedDriver, selectDriver] =useState(sampleDriver);
+  const [selectedConstructor, selectConstructor] =useState(sampleCon);
+  const [selectedCircuit, selectCircuit] =useState(sampleCircuit);
   const [isOpen, setIsOpen] = useState(false);
   const [isDriverOpen, setIsDriverOpen] = useState(false);
-  const[isConOpen, setIsConOpen] =useState(false);
-  const[isFavoritesOpen, setIsFavoritesOpen]=useState(false);
+  const [isConOpen, setIsConOpen] =useState(false);
+  const [isFavoritesOpen, setIsFavoritesOpen]=useState(false);
   const [circuitFavorites, setCircuitFavorites]=useState([]);
   const [driverFavorites, setDriverFavorites]=useState([]);
   const [constructorFavorites, setConstructorFavorites]=useState([]);
+  const [isMessageOpen, setMessageOpen] = useState(false);
+  const [message, setMessage] =useState("");
+  const [isCircuitOpen, setIsCircuitOpen]= useState(false);
 
   
   useEffect(() => {
@@ -194,8 +197,10 @@ function App() {
               </table>
             </div>
           </div>
-          <div className="mt-auto pt-4">
-            <button onClick={() => setIsFavoritesOpen(false)} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Close</button>
+          <div className="mt-auto m-auto pt-4">
+            <button onClick={() => setIsFavoritesOpen(false)} className="m-2 bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Close</button>
+            <button onClick={() =>{setCircuitFavorites([]); setDriverFavorites([]); setConstructorFavorites([]); setMessage("Favourites Cleared"); setMessageOpen(true); setIsFavoritesOpen(false)}} className="m-2 bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Empty Favorites</button>
+
           </div>
         </Dialog.Panel>
       </Dialog>
@@ -221,7 +226,8 @@ function App() {
           </Dialog.Description>
           <div className="flex justify-center space-x-3 pt-4">
             <button onClick={() => setIsDriverOpen(false)} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Close</button>
-            <button onClick={() => { if(!driverFavorites.includes(name)) {setDriverFavorites(prevFavorites => [...prevFavorites, name])}
+            <button onClick={() => { if(!driverFavorites.includes(name)) {setDriverFavorites(prevFavorites => [...prevFavorites, name]); setMessage("Added to Favorites"); } else{setMessage("Already In Favorites");}
+            setMessageOpen(true); 
             setIsDriverOpen(false);
             
             }} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Add Favorite</button>
@@ -231,17 +237,45 @@ function App() {
     );
   }
 
+  function TempDialog(props) {
+
+    useEffect(() => {
+      let timeoutId;
+      if (isMessageOpen) {
+        timeoutId = setTimeout(() => {
+          setTempMessageOpen(false);
+        }, 1300);
+      }});
+    
+    return (
+      <Dialog open={isMessageOpen} onClose={() => setMessageOpen(false)} className="fixed top-20 inset-x-0 z-50 text-white flex items-start justify-center fade-in-up">
+        <Dialog.Panel className="w-1/5 h-1/5 bg-gray-500 rounded-md p-6 flex flex-col justify-between">
+          <Dialog.Title className="text-center font-bold text-4xl mb-4">{props.text}</Dialog.Title>
+    
+        </Dialog.Panel>
+      </Dialog>
+    );
+  }
+
 
   const CircuitLink =(props)=>{
     
 
-      return <button onClick={()=>{selectCircuit(props.circuit);setIsCircuitOpen(true)}} className='underline hover:scale-105'>{props.circuit.name}</button>
-    
+    return (
+      <button 
+        onClick={() => {
+          selectCircuit(props.circuit);
+          setIsCircuitOpen(true);
+        }} 
+        className='underline hover:scale-105'
+      >
+        {props.circuit.name.length > 30 ? `${props.circuit.name.substring(0, 30)}...` : props.circuit.name}
+      </button>
+    );    
     
 
   }
 
-const[isCircuitOpen, setIsCircuitOpen]= useState(false);
 
 
   function CircuitDialog(props){
@@ -257,7 +291,10 @@ const[isCircuitOpen, setIsCircuitOpen]= useState(false);
       </Dialog.Description>
       <div className="flex justify-center space-x-3 pt-4">
         <button onClick={() => setIsCircuitOpen(false)} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Close</button>
-        <button onClick={() => { if(!circuitFavorites.includes(props.circuit.name)){setCircuitFavorites(prevFavorites => [...prevFavorites, props.circuit.name])}}} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Add Favorite</button>
+        <button onClick={() => { if(!circuitFavorites.includes(props.circuit.name)){setCircuitFavorites(prevFavorites => [...prevFavorites, props.circuit.name]); setMessage("Added to Favorites");} else{setMessage("Already In Favorites");}
+        setMessageOpen(true);
+        setIsCircuitOpen(false);
+      }} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Add Favorite</button>
       </div>
     </Dialog.Panel>
   </Dialog>
@@ -278,7 +315,8 @@ const[isCircuitOpen, setIsCircuitOpen]= useState(false);
           </Dialog.Description>
           <div className="flex justify-center space-x-3 pt-4">
             <button onClick={() => setIsConOpen(false)} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Close</button>
-            <button onClick={() => { if(!constructorFavorites.includes(props.constructor.name)) {setConstructorFavorites(prevFavorites => [...prevFavorites, props.constructor.name])}
+            <button onClick={() => { if(!constructorFavorites.includes(props.constructor.name)) {setConstructorFavorites(prevFavorites => [...prevFavorites, props.constructor.name]); setMessage("Added to Favorites"); } else{setMessage("Already In Favorites");}
+            setMessageOpen(true); 
             setIsConOpen(false);
             
             }} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Add Favorite</button>
@@ -543,7 +581,7 @@ const StandingDetails = () =>{
       <div className="w-full w-1/2 p-4 md:border-l overflow-y-scroll h-5/6">
         <h3 className="text-xl text-center font-semibold mb-3">Constructor Standings</h3>
         <table className="min-w-full text-sm overflow-y-scroll  bg-white">
-          <Tablehead entry= {["Pos"	,"Driver",	"Team"	,"Laps",	"Pts"]}/>
+          <Tablehead entry= {["Pos"	,"Constructor"	,"Laps",	"Pts"]}/>
           <tbody className="h-3/4">
             {constructorStandingsData.map(constructor => (
 
@@ -571,6 +609,8 @@ const StandingDetails = () =>{
 }
 
 
+
+
 const DriverLink =(props)=>{
 
   return <button onClick={()=>{selectDriver(props.driver);setIsDriverOpen(true)}} className='underline hover:scale-105'>{props.driver.forename+ " "+ props.driver.surname}</button>
@@ -587,7 +627,7 @@ const RaceDetails = () => {
       <div className="w-full w-1/2 p-4 overflow-y-scroll h-5/6">
         <h3 className="text-xl font-semibold mb-3 text-center">Qualifying</h3>
         <table className="min-w-full text-sm overflow-y-scroll bg-white">
-          <Tablehead entry = {["Pos",	"Driver",	"Team",	"Q1",	"Q2",	"Q3"]}/>
+          <Tablehead entry = {["Pos",	"Driver",	"",	"Q1",	"Q2",	"Q3"]}/>
           <tbody className="h-3/4">
 
             
@@ -617,7 +657,7 @@ const RaceDetails = () => {
 
 
         <table className="min-w-full text-sm  bg-white">
-          <Tablehead entry= {["Pos"	,"Driver",	"Team"	,"Laps",	"Pts"]}/>
+          <Tablehead entry= {["Pos"	,"Driver",	""	,"Laps",	"Pts"]}/>
           <tbody>
             {resultsData.map(result => (
 
@@ -664,6 +704,7 @@ const ConstructorLink =(props)=>{
 
   return (
     <>
+    <TempDialog text={message}/>
     
     <ConDialog constructor={selectedConstructor}/>
     <FavoritesDialog/>
