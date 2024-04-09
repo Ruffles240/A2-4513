@@ -130,7 +130,7 @@ function App() {
     return (
       <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="fixed inset-0 z-50 text-white flex items-center justify-center fade-in-up">
         <Dialog.Panel className="w-3/5 h-3/5 bg-gray-500 rounded-md p-6 flex flex-col justify-between">
-          <Dialog.Title className="text-center font-bold text-4xl mb-4">About</Dialog.Title>
+          <Dialog.Title className="text-center font-bold text-4xl mb-4"><h2>About</h2></Dialog.Title>
           <Dialog.Description>
 
             This project was made by Raphael Khan. Using Unsplash photos, credits to {<a href='https://unsplash.com/photos/red-and-black-f-1-race-car-on-track-during-daytime-M5s9Ffs1KqU'className='underline'>Clément Delacre</a>}.
@@ -150,7 +150,7 @@ function App() {
     return (
       <Dialog open={isFavoritesOpen} onClose={() => setIsFavoritesOpen(false)} className="fixed inset-0 z-50 text-white flex items-center justify-center fade-in-up">
         <Dialog.Panel className="w-5/6 h-5/6 bg-gray-500 rounded-md p-6 flex flex-col">
-          <Dialog.Title className="text-center font-bold text-4xl mb-4">Favorites</Dialog.Title>
+          <Dialog.Title className="text-center font-bold text-4xl mb-4"><h2>Favorites</h2></Dialog.Title>
           <Dialog.Description className="mb-4">
             {/* Your description content here */}
           </Dialog.Description>
@@ -211,11 +211,16 @@ function App() {
   function DriverDialog(props) {
 
     const name = props.driver.forename+" "+ props.driver.surname;
+
+    /**
+     * 
+     * image of Max Verstappen from https://www.motorsport.com/driver/max-verstappen/17529/
+     */
     
     return (
       <Dialog open={isDriverOpen} onClose={() => setIsDriverOpen(false)} className="fixed inset-0 z-50 text-white flex items-center justify-center fade-in-up">
         <Dialog.Panel className="w-3/5 h-3/5 bg-gray-500 rounded-md p-6 flex flex-col justify-between">
-          <Dialog.Title className="text-center font-bold text-4xl mb-4">{name}</Dialog.Title>
+          <Dialog.Title className="text-center font-bold text-4xl mb-4"><h2>{name}</h2></Dialog.Title>
           <Dialog.Description className={"m-auto mt-0"}>
             <p>Date of Birth: {props.driver.dob}</p>
             <p>Nationality: {props.driver.nationality}</p>
@@ -224,6 +229,8 @@ function App() {
 
           
           </Dialog.Description>
+
+          <img src='/images/Max.jpg' className='h-1/3 w-1/4 m-auto rounded' alt="Max Is Every F1 Driver"></img>
           <div className="flex justify-center space-x-3 pt-4">
             <button onClick={() => setIsDriverOpen(false)} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Close</button>
             <button onClick={() => { if(!driverFavorites.includes(name)) {setDriverFavorites(prevFavorites => [...prevFavorites, name]); setMessage("Added to Favorites"); } else{setMessage("Already In Favorites");}
@@ -250,7 +257,7 @@ function App() {
     return (
       <Dialog open={isMessageOpen} onClose={() => setMessageOpen(false)} className="fixed top-20 inset-x-0 z-50 text-white flex items-start justify-center fade-in-up">
         <Dialog.Panel className="w-1/5 h-1/5 bg-gray-500 rounded-md p-6 flex flex-col justify-between">
-          <Dialog.Title className="text-center font-bold text-4xl mb-4">{props.text}</Dialog.Title>
+          <Dialog.Title className="text-center font-bold text-4xl mb-4"><h2>{props.text}</h2></Dialog.Title>
     
         </Dialog.Panel>
       </Dialog>
@@ -282,13 +289,15 @@ function App() {
 
     return <Dialog open={isCircuitOpen} onClose={() => setIsCircuitOpen(false)} className="fixed inset-0 z-50 text-white flex items-center justify-center fade-in-up">
     <Dialog.Panel className="w-3/5 h-3/5 bg-gray-500 rounded-md p-6 flex flex-col justify-between">
-      <Dialog.Title className="text-center font-bold text-4xl mb-4">{props.circuit.name}</Dialog.Title>
+      <Dialog.Title className="text-center font-bold text-4xl mb-4"><h2>{props.circuit.name}</h2></Dialog.Title>
       <Dialog.Description className={"m-auto mt-0"}>
         <p>Nationality: {props.circuit.country}</p>
         <a href={props.circuit.url}>{props.circuit.url}</a>
 
       
       </Dialog.Description>
+      <img src='/images/qatar.webp' className='h-1/3 w-1/4 m-auto rounded' alt="Qatar Is Every F1 Circuit"></img>
+
       <div className="flex justify-center space-x-3 pt-4">
         <button onClick={() => setIsCircuitOpen(false)} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Close</button>
         <button onClick={() => { if(!circuitFavorites.includes(props.circuit.name)){setCircuitFavorites(prevFavorites => [...prevFavorites, props.circuit.name]); setMessage("Added to Favorites");} else{setMessage("Already In Favorites");}
@@ -299,6 +308,12 @@ function App() {
     </Dialog.Panel>
   </Dialog>
   }
+
+  /**
+   * image from https://montrealgrandprix.com/news/top-manufacturers-formula-1-cars/
+   * @param {*} props 
+   * @returns 
+   */
 
   function ConDialog(props) {
 
@@ -313,6 +328,8 @@ function App() {
 
           
           </Dialog.Description>
+          <img src='/images/mclaren.jpg' className='h-1/3 w-1/4 m-auto rounded' alt="McLaren Is Every F1 Constructor"></img>
+
           <div className="flex justify-center space-x-3 pt-4">
             <button onClick={() => setIsConOpen(false)} className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">Close</button>
             <button onClick={() => { if(!constructorFavorites.includes(props.constructor.name)) {setConstructorFavorites(prevFavorites => [...prevFavorites, props.constructor.name]); setMessage("Added to Favorites"); } else{setMessage("Already In Favorites");}
@@ -354,13 +371,18 @@ function App() {
 
   }
 
- 
+ /**
+  * Trophy icons from https://www.vectorstock.com/royalty-free-vector/gold-silver-and-bronze-winners-cup-flat-icon-vector-2635677
+  * @param {
+  * } param0 
+  * @returns 
+  */
 
-  const PodiumItem = ({ driverName, position, imageSrc }) => {
+  const PodiumItem = ({ driver, position, imageSrc, driverName }) => {
     return (
       <div className="flex flex-col items-center p-4 border bg-gray-300 border-gray-300 rounded shadow w-1/3">
         <div className="text-m font-semibold text-center h-8 overflow-hidden">
-          <span className="block truncate">{driverName}</span>
+          <span className="block truncate" alt={driverName}>{driver}</span>
         </div>
         <img src={imageSrc} alt={driverName} className="w-24 h-24 mt-2 mb-4 rounded-full object-cover" />
         <div className="text-xl font-bold">{position}</div>
@@ -379,9 +401,12 @@ const Podium = ({ topDrivers }) => {
           i++;
           return <PodiumItem
           key={i}
-          driverName={<DriverLink driver={d}/>}
+          driver={<DriverLink driver={d}/>}
           position={i}
-          imageSrc={"/images/"+i+".png"} />;}
+          imageSrc={"/images/"+i+".png"} 
+        driverName={d.surname}/>
+         
+        }
       )}
     </div>
   );
@@ -460,6 +485,7 @@ const TableMaker =(props) =>{
 
 const RacesTable = () => {
 
+
   const races =  
     raceData.map(race => 
       <TableMaker key ={race.id} entries = {[race.round, <CircuitLink circuit ={race.circuits}/>, [<button key = {0} className="bg-gray-500 text-white text-sm px-1 py-1 rounded hover:bg-gray-400 ml-1" onClick={()=>{setRace(race.raceId)
@@ -473,6 +499,8 @@ const RacesTable = () => {
         setRaceView(false);
 
       }}>Standings</button>]]}/>);
+
+
   return (
     <div className="h-screen">
 
