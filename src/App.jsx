@@ -13,6 +13,10 @@ const supaAPI="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJl
 const supabase = createClient(supaUrl, supaAPI);
 
 function App() {
+
+  /**
+   * These are sample objects for my methods to hold before being filled in supabase data
+   */
   const sampleDriver= {
     "driverId": 1,
     "driverRef": "speedster_john",
@@ -129,6 +133,34 @@ function App() {
 
     setConstructorStandingsData(data);
   }
+
+  useEffect(() => {
+    getRaceData();
+  }, [currentYear]);
+  async function getRaceData() {
+    const { data } = await supabase.from('races').select(('*, circuits(*)')).eq('year', currentYear).order('round');
+    setSeason(data);
+  };
+
+  async function getYears() {
+    const { data } = await supabase.from('seasons').select('year').order('year', {ascending:false});
+    setYears(data);
+  }
+
+  useEffect(()=>{
+
+    getResultsData();
+  }, [selectedRace])
+
+
+  async function getResultsData(){
+    const{ data } = await supabase.from('results').select('*, drivers (driverId, forename,surname, dob, nationality, url, number),races(round, name, date, url, circuits(name)), constructors(constructorId, name, nationality, url)').eq('raceId',selectedRace).order('positionOrder');
+
+    setResults(data);
+
+
+
+  }
   
   /**
    * 
@@ -154,6 +186,10 @@ function App() {
       </Dialog>
     );
   }
+  
+  /**
+   * This popup allows me to bring the favorites menu up.
+   */
 
   function FavoritesDialog() {
     return (
@@ -216,6 +252,9 @@ function App() {
     );
   }
 
+  /**
+   * Driver info modal
+   */
 
   function DriverDialog(props) {
 
@@ -253,6 +292,11 @@ function App() {
     );
   }
 
+  
+  /**
+   * THis is used for various messages
+   */
+
   function TempDialog(props) {
 
     useEffect(() => {
@@ -273,6 +317,9 @@ function App() {
     );
   }
 
+  /**
+   * Makes links for circuits
+   */
 
   const CircuitLink =(props)=>{
     
@@ -292,6 +339,11 @@ function App() {
 
   }
 
+  /**
+   * Gives Circuit info
+   * 
+   * 
+   */
 
 
   function CircuitDialog(props){
@@ -352,33 +404,7 @@ function App() {
     );
   }
 
-  useEffect(() => {
-    getRaceData();
-  }, [currentYear]);
-  async function getRaceData() {
-    const { data } = await supabase.from('races').select(('*, circuits(*)')).eq('year', currentYear).order('round');
-    setSeason(data);
-  };
-
-  async function getYears() {
-    const { data } = await supabase.from('seasons').select('year').order('year', {ascending:false});
-    setYears(data);
-  }
-
-  useEffect(()=>{
-
-    getResultsData();
-  }, [selectedRace])
-
-
-  async function getResultsData(){
-    const{ data } = await supabase.from('results').select('*, drivers (driverId, forename,surname, dob, nationality, url, number),races(round, name, date, url, circuits(name)), constructors(constructorId, name, nationality, url)').eq('raceId',selectedRace).order('positionOrder');
-
-    setResults(data);
-
-
-
-  }
+  
 
  /**
   * Trophy icons from https://www.vectorstock.com/royalty-free-vector/gold-silver-and-bronze-winners-cup-flat-icon-vector-2635677
@@ -524,12 +550,16 @@ const RacesTable = () => {
   );
 };
 
-const LoggedIn = function (props){
+/**
+ * The logged in screen
+ * @param {*} props 
+ * @returns 
+ */
+const LoggedIn = function (){
 
 
 
-
-  const SelectBar = (props) =>{
+  const SelectBar = () =>{
     
     
 return <select id="season" value={currentYear} className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none sm:text-sm rounded-md" onChange={(event) => {
@@ -566,7 +596,7 @@ return <select id="season" value={currentYear} className="mt-1 block w-full pl-3
       </div>
     </aside>
     
-    <section className="bg-gray-200 p-4 mr-6 mt-4 m-2 h-5/6 min-w-[calc(100%-550px)] max-w-[calc(100%-550px)] rounded ">
+    <section className="bg-gray-200 p-4 mr-6 mt-4 m-2 h-5/6 min-w-[calc(100%-590px)] max-w-[calc(100%-590px)] rounded ">
       {raceView ? (
         <div className="h-full">
           <h2 className="text-3xl font-bold mb-4 text-center">Race Details</h2>
@@ -585,6 +615,11 @@ return <select id="season" value={currentYear} className="mt-1 block w-full pl-3
     </div>
   );
 };
+
+/**
+ * 
+ * @returns Provides the Standings tables
+ */
 
 const StandingDetails = () =>{
 
