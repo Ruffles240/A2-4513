@@ -553,7 +553,7 @@ const StandingDetails = () =>{
 
   return (
     <div className="flex flex-col md:flex-row h-full">
-      <div className="w-full w-1/2 p-4 overflow-y-scroll h-3/4">
+      <div className="w-full w-1/2 p-4 overflow-y-scroll h-5/6">
         <h3 className="text-xl font-semibold mb-3 text-center">Driver Standings</h3>
 
         <table className="min-w-full text-sm overflow-y-scroll bg-white">
