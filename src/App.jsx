@@ -216,7 +216,7 @@ function App() {
       <Dialog open={isDriverOpen} onClose={() => setIsDriverOpen(false)} className="fixed inset-0 z-50 text-white flex items-center justify-center fade-in-up">
         <Dialog.Panel className="w-3/5 h-3/5 bg-gray-500 rounded-md p-6 flex flex-col justify-between">
           <Dialog.Title className="text-center font-bold text-4xl mb-4">{name}</Dialog.Title>
-          <Dialog.Description className={"ml-10 mr-10"}>
+          <Dialog.Description className={"m-auto mt-0"}>
             <p>Date of Birth: {props.driver.dob}</p>
             <p>Nationality: {props.driver.nationality}</p>
             <a href={props.driver.url}>{props.driver.url}</a>
@@ -283,7 +283,7 @@ function App() {
     return <Dialog open={isCircuitOpen} onClose={() => setIsCircuitOpen(false)} className="fixed inset-0 z-50 text-white flex items-center justify-center fade-in-up">
     <Dialog.Panel className="w-3/5 h-3/5 bg-gray-500 rounded-md p-6 flex flex-col justify-between">
       <Dialog.Title className="text-center font-bold text-4xl mb-4">{props.circuit.name}</Dialog.Title>
-      <Dialog.Description className={"m-auto"}>
+      <Dialog.Description className={"m-auto mt-0"}>
         <p>Nationality: {props.circuit.country}</p>
         <a href={props.circuit.url}>{props.circuit.url}</a>
 
@@ -307,7 +307,7 @@ function App() {
       <Dialog open={isConOpen} onClose={() => setIsConOpen(false)} className="fixed inset-0 z-50 text-white flex items-center justify-center fade-in-up">
         <Dialog.Panel className="w-3/5 h-3/5 bg-gray-500 rounded-md p-6 flex flex-col justify-between">
           <Dialog.Title className="text-center font-bold text-4xl mb-4">{props.constructor.name}</Dialog.Title>
-          <Dialog.Description className={"m-auto"}>
+          <Dialog.Description className={"m-auto mt-0"}>
             <p>Nationality: {props.constructor.nationality}</p>
             <a href={props.constructor.url}>{props.constructor.url}</a>
 
