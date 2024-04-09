@@ -381,7 +381,7 @@ const Podium = ({ topDrivers }) => {
           key={i}
           driverName={<DriverLink driver={d}/>}
           position={i}
-          imageSrc={"./images/"+i+".png"} />;}
+          imageSrc={"/images/"+i+".png"} />;}
       )}
     </div>
   );
