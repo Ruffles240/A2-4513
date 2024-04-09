@@ -69,6 +69,8 @@ function App() {
   const [message, setMessage] =useState("");
   const [isCircuitOpen, setIsCircuitOpen]= useState(false);
 
+  const [currentRace, setCurrentRace] =useState([]);
+
   
   useEffect(() => {
     getYears();
@@ -76,9 +78,16 @@ function App() {
 
   
 
-  async function getConstructor(){
-    const { data } = await supabase.from('constructors').select().eq('constructorId', conFinder);
-    selectConstructor(data[0]);
+
+  useEffect(()=>{
+    getRace();
+
+  }, [selectedRace])
+
+  async function getRace(){
+    const{ data } = await supabase.from('races').select('*, circuits(*)').eq('raceId',selectedRace);
+
+    setCurrentRace(data);
 
   }
 
@@ -580,8 +589,19 @@ return <select id="season" value={currentYear} className="mt-1 block w-full pl-3
 const StandingDetails = () =>{
 
   return (
+    <div className='h-full'>
+      {
+        currentRace.length ? (
+          <div className='bg-gray-200 rounded-lg shadow-md p-4 m-auto text-center mt-2 mb-2'>
+            <span className='font-bold'>After Round:</span> {currentRace[0].round} 
+            
+          </div>
+        ) : <></>
+      }
     <div className="flex flex-col md:flex-row h-full">
-      <div className="w-full w-1/2 p-4 overflow-y-scroll h-5/6">
+
+    
+      <div className="w-full w-1/2 p-4 overflow-y-scroll h-4/5">
         <h3 className="text-xl font-semibold mb-3 text-center">Driver Standings</h3>
 
         <table className="min-w-full text-sm overflow-y-scroll bg-white">
@@ -606,7 +626,7 @@ const StandingDetails = () =>{
         </table>
       </div>
 
-      <div className="w-full w-1/2 p-4 md:border-l overflow-y-scroll h-5/6">
+      <div className="w-full w-1/2 p-4 md:border-l overflow-y-scroll h-4/5">
         <h3 className="text-xl text-center font-semibold mb-3">Constructor Standings</h3>
         <table className="min-w-full text-sm overflow-y-scroll  bg-white">
           <Tablehead entry= {["Pos"	,"Constructor"	,"Laps",	"Pts"]}/>
@@ -630,6 +650,7 @@ const StandingDetails = () =>{
         </table>
       </div>
     </div>
+    </div>
   );
 
 
@@ -644,15 +665,30 @@ const DriverLink =(props)=>{
   return <button onClick={()=>{selectDriver(props.driver);setIsDriverOpen(true)}} className='underline hover:scale-105'>{props.driver.forename+ " "+ props.driver.surname}</button>
 
 }
-console.log({resultsData})
 
 
 const RaceDetails = () => {
 
 
   return (
+
+    <div className='h-full'>
+      {
+        currentRace.length ? (
+          <div className='bg-gray-200 rounded-lg shadow-md p-2 m-auto text-center  mb-2'>
+            <span className='font-bold'>Round:</span> {currentRace[0].round} 
+            <span className='font-bold ml-4'>Year:</span> {currentRace[0].year} 
+            <span className='font-bold ml-4'>Date:</span> {currentRace[0].date}
+            <span className='font-bold ml-4'>Circuit:</span> <CircuitLink circuit={currentRace[0].circuits}/>
+            <span className='font-bold ml-4'>Url:</span> <a href={currentRace[0].url}>{currentRace[0].url}</a>
+
+
+          </div>
+        ) : <></>
+      }
     <div className="flex flex-col md:flex-row h-full">
-      <div className="w-full w-1/2 p-4 overflow-y-scroll h-5/6">
+      
+      <div className="w-full w-1/2 p-4 overflow-y-scroll h-4/5 mt-15">
         <h3 className="text-xl font-semibold mb-3 text-center">Qualifying</h3>
         <table className="min-w-full text-sm overflow-y-scroll bg-white">
           <Tablehead entry = {["Pos",	"Driver",	"",	"Q1",	"Q2",	"Q3"]}/>
@@ -676,7 +712,7 @@ const RaceDetails = () => {
         </table>
       </div>
 
-      <div className="w-full w-1/2 p-4 md:border-l overflow-scroll h-5/6 ml-3">
+      <div className="w-full w-1/2 p-4 md:border-l overflow-scroll h-4/5 ml-3 mt-15">
         <h3 className="text-xl text-center font-semibold mb-3">Results</h3>
 
       
@@ -696,6 +732,7 @@ const RaceDetails = () => {
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   );
 };
